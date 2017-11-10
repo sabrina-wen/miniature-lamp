@@ -2,10 +2,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <string.h>
 
 static void sighandler(int signo) {
   if (signo == SIGINT) {
-    printf("\nexiting file b/c of SIGINT, pce\n");
+    char str[] = "exiting file b/c of SIGINT, pce\n";
+    int file = open("blah.txt", O_RDWR | O_APPEND);
+    write(file, "exiting file b/c of SIGINT, pce\n", 1000);
+    close(file);
+    printf("\n%s", str);
     exit(1);
   }
   if (signo == SIGUSR1) {
